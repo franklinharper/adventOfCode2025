@@ -2,11 +2,17 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import kotlin.io.path.Path
 import kotlin.io.path.readText
+import kotlin.system.exitProcess
 
 /**
  * Reads lines from the given input txt file.
  */
-fun readInput(name: String) = Path("src/$name.txt").readText().trim().lines()
+fun readInput(name: String) = try {
+    Path("src/$name.txt").readText().trim().lines()
+} catch (_: java.nio.file.NoSuchFileException) {
+    println("Input file 'src/$name.txt' was not found. Add it, then run again.")
+    exitProcess(0)
+}
 
 /**
  * Converts string to md5 hash.
