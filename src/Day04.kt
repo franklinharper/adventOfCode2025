@@ -58,15 +58,15 @@ fun main() {
 
     val testInput = readInput("${day}_test")
 
-    println($$"Test part1")
+    println("Test part1")
     checkEquals(
         actual = part1(testInput),
         expected = 13
     )
 
     val input = readInput("${day}_input")
-    part1(input).println()
     println("Result part1")
+    part1(input).println()
 
     println("Test part2")
     checkEquals(

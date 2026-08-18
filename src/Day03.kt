@@ -40,7 +40,6 @@ fun main() {
     }
 
     fun findMax(digits: List<Int>, targetLength: Int): Long {
-        println("findMax digits: $digits, targetLength: $targetLength")
         var max = 0L
         var currentDigits = digits
         var currentTargetLength = targetLength
@@ -50,7 +49,6 @@ fun main() {
             currentDigits = currentDigits.drop(nextDigitIndex + 1)
             currentTargetLength--
         }
-        println("findMax max: $max")
         return max
     }
 
@@ -74,15 +72,15 @@ fun main() {
 
     val testInput = readInput("${day}_test")
 
-    println($$"Test part1")
+    println("Test part1")
     checkEquals(
         actual = part1(testInput),
         expected = 357
     )
 
     val input = readInput("${day}_input")
-    part1(input).println()
     println("Result part1")
+    part1(input).println()
 
     println("Test part2")
     checkEquals(

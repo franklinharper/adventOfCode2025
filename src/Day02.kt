@@ -20,12 +20,10 @@ fun main() {
             val end = range[1].toLong()
             for (id in start..end) {
                 if (isRepeat(id)) {
-                    println("repeat id $id")
                     res += id
                 }
             }
         }
-        println("///")
         return res
     }
 
@@ -44,17 +42,14 @@ fun main() {
         val ranges = input.split(',')
         for (s in ranges) {
             val range = s.split('-')
-            println("range: $range")
             val start = range[0].toLong()
             val end = range[1].toLong()
             for (id in start..end) {
                 if (isInvalid(id)) {
-                    println("invalid id $id")
                     res += id
                 }
             }
         }
-        println("///")
         return res
     }
 

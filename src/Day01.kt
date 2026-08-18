@@ -6,10 +6,8 @@ fun main() {
             val value = s.substring(1).toInt()
             val offset = if (s.startsWith("L")) -value else value
             pos = (pos + offset).mod(100)
-            println(pos)
             if (pos == 0) res++
         }
-        println("///")
         return res
     }
 
@@ -23,9 +21,7 @@ fun main() {
             if (newPos == -1) newPos = 99
             if (newPos == 100) newPos = 0
             if (newPos == 0) zeroCount++
-//            println(newPos)
         }
-        println("///")
         return Pair(newPos, zeroCount)
     }
 
@@ -35,10 +31,8 @@ fun main() {
         for (s in input) {
             val (newPos, zeros) = countZeros(pos, s)
             pos = newPos
-            println(pos)
             zeroCount += zeros
         }
-        println("***")
         return zeroCount
     }
 
