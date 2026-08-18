@@ -1,6 +1,6 @@
 fun main() {
 
-    val day = "Day04"
+    val day = "Day05"
 
     val offsets = listOf(-1, 0, 1)
 
@@ -58,7 +58,7 @@ fun main() {
 
     val testInput = readInput("${day}_test")
 
-    println($$"Test part1")
+    println("Test part1")
     checkEquals(
         actual = part1(testInput),
         expected = 13
