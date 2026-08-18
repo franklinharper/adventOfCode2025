@@ -49,7 +49,7 @@ fun main() {
         expected = 6
     )
 
-    // Read the input from the `src/Day01.txt` file.
+    // Read the input from the `src/Day01_input.txt` file.
     val input = readInput("Day01_input")
     println("Result part1")
     part1(input).println()

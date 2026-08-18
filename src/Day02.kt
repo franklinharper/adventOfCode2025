@@ -11,14 +11,15 @@ fun main() {
         return firstHalf == secondHalf
     }
 
+    fun parseRanges(input: String): List<LongRange> = input.split(',').map { range ->
+        val (start, end) = range.split('-').map(String::toLong)
+        start..end
+    }
+
     fun part1(input: String): Long {
         var res = 0L
-        val ranges = input.split(',')
-        for (s in ranges) {
-            val range = s.split('-')
-            val start = range[0].toLong()
-            val end = range[1].toLong()
-            for (id in start..end) {
+        for (range in parseRanges(input)) {
+            for (id in range) {
                 if (isRepeat(id)) {
                     res += id
                 }
@@ -39,12 +40,8 @@ fun main() {
 
     fun part2(input: String): Long {
         var res = 0L
-        val ranges = input.split(',')
-        for (s in ranges) {
-            val range = s.split('-')
-            val start = range[0].toLong()
-            val end = range[1].toLong()
-            for (id in start..end) {
+        for (range in parseRanges(input)) {
+            for (id in range) {
                 if (isInvalid(id)) {
                     res += id
                 }
