@@ -1,53 +1,60 @@
 fun main() {
 
     val day = "Day06"
-    val splitPattern = "\\s+".toRegex()
+    val splitRegex = Regex(pattern = """\s+""")
 
     fun part1(input: List<String>): Long {
-        val operators = input.last().trim().split(splitPattern)
-        val columnTotals = operators.map { operator ->
-            if (operator == "+") 0L else 1L
-        }.toMutableList()
-
-        for (s in input.dropLast(1)) {
-            val nums = s.trim().split(splitPattern).map(String::toLong)
-            for (column in nums.indices) {
-                when (operators[column]) {
-                    "+" -> columnTotals[column] += nums[column]
-                    "*" -> columnTotals[column] *= nums[column]
-                }
-            }
+        val operators = input.last().split(regex = splitRegex)
+        val parsedData = input.dropLast(1).map { line ->
+            line.trim().split(splitRegex).map { it.toLong() }
         }
-        return columnTotals.sum()
+        val problemIndices = operators.indices
+        // For each problem create a list containing the data for that problem.
+        // I.e. Transpose the input data. All the data from col 0 is now in row 0, etc.
+        val problemData = problemIndices.map { problemIndex ->
+            parsedData.map { row -> row[problemIndex] }
+        }
+        val problemTotals = operators.zip(problemData).map { (operator, data) ->
+           when (operator) {
+               "+" ->  data.sum()
+               "*" ->  data.fold(1L) { acc, value -> acc * value }
+               else -> error("Unexpected operator: $operator")
+           }
+        }
+        return problemTotals.sum()
     }
 
     fun part2(input: List<String>): Long {
-        val dataRows = input.dropLast(1)
-        val operators = input.last().trim().split(splitPattern)
+        val operators = input.last().split(regex = splitRegex)
+        val data = input.dropLast(1)
 
         val problemData = mutableListOf<MutableList<Long>>()
         var currentData = mutableListOf<Long>()
 
-        for (ci in dataRows.first().indices) {
-            val digits = dataRows
-                .map { it[ci] }
+        val columIndices = data[0].indices
+        for(columnIndex in columIndices) {
+            val digits = data
+                .map { row -> row[columnIndex] }
                 .filter { it != ' ' }
-                .joinToString(separator = "")
+                .joinToString("")
+
             if (digits.isEmpty()) {
-                problemData.add(currentData)
-                currentData = mutableListOf()
+               problemData.add(currentData)
+               currentData = mutableListOf()
             } else {
                 currentData.add(digits.toLong())
             }
         }
         problemData.add(currentData)
-        return operators.zip(problemData).sumOf { (operator, data) ->
+
+        val problemTotals = operators.zip(problemData).map { (operator, data) ->
             when (operator) {
-                "+" -> data.sum()
-                "*" -> data.fold(initial = 1L) { acc, value -> acc * value }
-                else -> throw Error("Unknown operator $operator")
+                "+" ->  data.sum()
+                "*" ->  data.fold(1L) { acc, value -> acc * value }
+                else -> error("Unexpected operator: $operator")
             }
         }
+        return problemTotals.sum()
     }
 
     val testInput = readInput("${day}_test")
@@ -59,12 +66,13 @@ fun main() {
     )
 
     val input = readInput("${day}_input")
-    println("Result part1: ${part1(input)}")
+    val part1Result = part1(input)
+    println("Result part1: $part1Result")
 
     checkEquals(
-        message = "Test part2",
-        actual = part2(testInput),
-        expected = 3263827L
+        message = "Result part1",
+        actual = part1Result,
+        expected = 6891729672676
     )
 
     val part2Result = part2(input)
@@ -75,5 +83,4 @@ fun main() {
         actual = part2Result,
         expected = 9770311947567L
     )
-
 }
