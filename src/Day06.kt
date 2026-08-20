@@ -22,41 +22,38 @@ fun main() {
     }
 
     fun part2(input: List<String>): Long {
+        val dataRows = input.dropLast(1)
         val operators = input.last().trim().split(splitPattern)
-        var currentProblem = 0
 
-        val problemTotals = operators.map { operator ->
-            if (operator == "+") 0L else 1L
-        }.toMutableList()
+        val problemData = mutableListOf<MutableList<Long>>()
+        var currentData = mutableListOf<Long>()
 
-        val columnCount = input.first().length
-
-        for (ci in 0 until columnCount) {
-           var entireColumnBlank = true
-           var num = 0L
-           for (ri in 0 .. input.lastIndex - 1) {
-               val char = input[ri][ci]
-               if (char != ' ') {
-                   entireColumnBlank = false
-                   num = num * 10 + (char - '0')
-               }
-           }
-            if (entireColumnBlank) {
-                currentProblem++
+        for (ci in dataRows.first().indices) {
+            val digits = dataRows
+                .map { it[ci] }
+                .filter { it != ' ' }
+                .joinToString(separator = "")
+            if (digits.isEmpty()) {
+                problemData.add(currentData)
+                currentData = mutableListOf()
             } else {
-                when (operators[currentProblem]) {
-                    "+" -> problemTotals[currentProblem] += num
-                    "*" -> problemTotals[currentProblem] *= num
-                }
+                currentData.add(digits.toLong())
             }
         }
-        return problemTotals.sum()
+        problemData.add(currentData)
+        return operators.zip(problemData).sumOf { (operator, data) ->
+            when (operator) {
+                "+" -> data.sum()
+                "*" -> data.fold(initial = 1L) { acc, value -> acc * value }
+                else -> throw Error("Unknown operator $operator")
+            }
+        }
     }
 
     val testInput = readInput("${day}_test")
 
     checkEquals(
-        message  = "Test part1",
+        message = "Test part1",
         actual = part1(testInput),
         expected = 4277556
     )
@@ -65,10 +62,18 @@ fun main() {
     println("Result part1: ${part1(input)}")
 
     checkEquals(
-        message  = "Test part2",
+        message = "Test part2",
         actual = part2(testInput),
-        expected = 3263827
+        expected = 3263827L
     )
 
-    println("Result part2: ${part2(input)}")
+    val part2Result = part2(input)
+    println("Result part2: $part2Result")
+
+    checkEquals(
+        message = "Part2 result",
+        actual = part2Result,
+        expected = 9770311947567L
+    )
+
 }
