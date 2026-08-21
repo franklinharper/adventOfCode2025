@@ -26,14 +26,14 @@ fun main() {
 
     fun part2(input: List<String>): Long {
         val operators = input.last().split(regex = splitRegex)
-        val data = input.dropLast(1)
+        val dataRows = input.dropLast(1)
 
         val problemData = mutableListOf<MutableList<Long>>()
         var currentData = mutableListOf<Long>()
 
-        val columIndices = data[0].indices
-        for(columnIndex in columIndices) {
-            val digits = data
+        val columnIndices = dataRows.first().indices
+        for(columnIndex in columnIndices) {
+            val digits = dataRows
                 .map { row -> row[columnIndex] }
                 .filter { it != ' ' }
                 .joinToString("")
