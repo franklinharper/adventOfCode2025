@@ -3,28 +3,25 @@ fun main() {
     val day = "Day07"
 
     fun part1(input: List<String>): Int {
-        var splits = 0
-        var previousLine = input.first().replace('S', '|').toCharArray()
-        for (inputLine in input.drop(1)) {
-            val nextLine = CharArray(previousLine.size) { '.' }
-            for (index in previousLine.indices) {
-                when (previousLine[index]) {
-                    '|' -> {
-                        if (inputLine[index] == '^') {
-                            nextLine[index - 1] = '|'
-                            nextLine[index] = '^'
-                            nextLine[index + 1] = '|'
-                            splits++
-                        } else {
-                            nextLine[index] = '|'
-                        }
+        data class SimulationState(val activeColumns: Set<Int>, val splitCount: Int)
+
+        val initialColumn = input.first().indexOf('S')
+        return input.drop(1)
+            .fold(SimulationState(activeColumns = setOf(initialColumn), splitCount = 0)) { simulation, row ->
+                val splitColumns = simulation.activeColumns.filter { column -> row[column] == '^' }
+                val nextColumns = simulation.activeColumns
+                    .flatMap { column ->
+                        if (column in splitColumns) listOf(column - 1, column + 1)
+                        else listOf(column)
                     }
-                }
+                    .toSet()
+
+                SimulationState(
+                    activeColumns = nextColumns,
+                    splitCount = simulation.splitCount + splitColumns.size
+                )
             }
-//            println(nextLine)
-            previousLine = nextLine
-        }
-        return splits
+            .splitCount
     }
 
     // Calculate the number of timelines active after a single particle completes all of
@@ -34,7 +31,6 @@ fun main() {
         val memo = Array(input.size + 1) { LongArray(input.first().length) { 0 }}
 
         fun dfs(row: Int, col: Int): Long {
-            println("row: $row, col: $col")
             val timeLines = when {
                 row == input.size -> 1L // Particle has reached the bottom
                 memo[row][col] > 0L -> memo[row][col]
@@ -74,9 +70,9 @@ fun main() {
     val part2Result = part2(input)
     println("Result part2: $part2Result")
 
-//    checkEquals(
-//        message = "Part2 result",
-//        actual = part2Result,
-//        expected = 9770311947567L
-//    )
+    checkEquals(
+        message = "Part2 result",
+        actual = part2Result,
+        expected = 34339203133559L
+    )
 }
