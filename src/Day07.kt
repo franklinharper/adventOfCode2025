@@ -27,22 +27,28 @@ fun main() {
     // Calculate the number of timelines active after a single particle completes all of
     // its possible journeys through the manifold.
     fun part2(input: List<String>): Long {
+        val rowCount = input.size
+        // Puzzle input has a top-row S, rectangular rows, and no edge splitters.
+        val columnCount = input.first().length
+        val timelinesFrom = Array(rowCount) { LongArray(columnCount) }
 
-        val memo = Array(input.size + 1) { LongArray(input.first().length) { 0 }}
+        // DFS with memoization.
+        fun countTimelines(row: Int, column: Int): Long {
+            if (row == rowCount) return 1L
+            if (timelinesFrom[row][column] != 0L) return timelinesFrom[row][column]
 
-        fun dfs(row: Int, col: Int): Long {
-            val timeLines = when {
-                row == input.size -> 1L // Particle has reached the bottom
-                memo[row][col] > 0L -> memo[row][col]
-                input[row][col] == '^' -> dfs(row + 1, col - 1) + dfs(row + 1, col + 1)
-                else -> dfs(row + 1, col)
+            // '^' is the particle splitter
+            val timelines = if (input[row][column] == '^') {
+                countTimelines(row + 1, column - 1) + countTimelines(row + 1, column + 1)
+            } else {
+                countTimelines(row + 1, column)
             }
-            memo[row][col] = timeLines
-            return timeLines
+            timelinesFrom[row][column] = timelines
+            return timelines
         }
 
-        val initialParticleCol = input.first().indexOf('S')
-        return dfs(row = 1, col = initialParticleCol)
+        val startColumn = input.first().indexOf('S')
+        return countTimelines(row = 1, column = startColumn)
     }
 
     val testInput = readInput("${day}_test")
