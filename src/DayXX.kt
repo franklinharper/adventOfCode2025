@@ -11,28 +11,20 @@ fun main() {
     }
 
     val testInput = readInput("${day}_test")
-
+    val resultTestPart1 = part1(testInput)
+    println("Result test part1: $resultTestPart1")
     checkEquals(
         message = "Test part1",
-        actual = part1(testInput),
-        expected = 0
+        actual = resultTestPart1,
+        expected = 0L
     )
-
+//
 //    val input = readInput("${day}_input")
-//    println("Result part1: ${part1(input)}")
-//
-//    checkEquals(
-//        message = "Test part2",
-//        actual = part2(testInput),
-//        expected = 0
-//    )
-//
 //    val part2Result = part2(input)
 //    println("Result part2: $part2Result")
-//
 //    checkEquals(
 //        message = "Part2 result",
 //        actual = part2Result,
-//        expected = 9770311947567L
+//        expected = 0L
 //    )
 }
